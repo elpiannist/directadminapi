@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\LoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::get('/login', [LoginController::class, 'loginView']);
+Route::post('/login', [LoginController::class, 'logIn']);
+Route::group(['middleware'=>'loginAuth'], function(){
+    Route::get('/', function () {return view('dapanel');});
+    Route::get('/addUser', [UserController::class, 'addUser']);
+    Route::get('/listUsers', [UserController::class, 'listUsers']);
+    Route::post('/addUser', [UserController::class, 'createUser']);
 });
